@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Clients",
   description:
     "Featured clients of CodeandAI — Galaxy Dental Care and JusticeHome.",
+  alternates: {
+    canonical: "/clients",
+  },
 };
 
 const featuredClients: {

@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Testimonials",
   description:
     "What clients say about working with CodeandAI on web, mobile, and enterprise software.",
+  alternates: {
+    canonical: "/testimonials",
+  },
 };
 
 const testimonials: {

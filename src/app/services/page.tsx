@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Services",
   description:
     "Software solutions from CodeandAI — web apps, Android, iPhone, and enterprise digital systems.",
+  alternates: {
+    canonical: "/services",
+  },
 };
 
 const services = [

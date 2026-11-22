@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import LandingInquiryForm from "@/components/LandingInquiryForm";
 import LandingFaq from "@/components/LandingFaq";
@@ -12,6 +13,12 @@ import {
   SITE_COUNTRY,
   SITE_URL,
 } from "@/lib/site";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: SITE_URL,
+  },
+};
 
 const valueCards = [
   {

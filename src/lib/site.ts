@@ -1,4 +1,7 @@
+/** Preferred / canonical origin (apex, non-www). www redirects here. */
 export const SITE_URL = "https://codeaicloud.com";
+export const SITE_HOST = "codeaicloud.com";
+export const SITE_WWW_HOST = "www.codeaicloud.com";
 export const SITE_NAME = "CodeAI Cloud";
 export const SITE_PHONE = "+918328670576";
 export const SITE_PHONE_DISPLAY = "8328670576";
