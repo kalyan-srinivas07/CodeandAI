@@ -33,7 +33,7 @@ export default function ContactPage() {
     const company = String(data.get("company") || "").trim() || "—";
     const message = String(data.get("message") || "").trim();
 
-    const subject = `Code & AI inquiry — ${platform}`;
+    const subject = "inquiry";
     const bodyLines = [
       `Name: ${name}`,
       `Email: ${email}`,
@@ -58,7 +58,7 @@ export default function ContactPage() {
           body: JSON.stringify({
             access_key: web3Key,
             subject,
-            from_name: "Code & AI website",
+            from_name: "inquiry",
             name,
             email,
             phone,

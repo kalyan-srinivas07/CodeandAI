@@ -973,7 +973,7 @@
               email,
               phone,
               message,
-              _subject: "New inquiry from Code & AI — " + name,
+              _subject: "inquiry",
               _template: "table",
               _captcha: "false"
             })
@@ -985,7 +985,7 @@
             data.message.toLowerCase().indexOf("activation") !== -1;
 
           if (needsActivation) {
-            var subject = "New inquiry from Code & AI — " + name;
+            var subject = "inquiry";
             var body = [
               "Name: " + name,
               "Email: " + email,
