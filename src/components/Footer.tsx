@@ -1,28 +1,36 @@
 import Link from "next/link";
+import {
+  SITE_EMAIL,
+  SITE_LOCALITY,
+  SITE_PHONE,
+  SITE_PHONE_DISPLAY,
+} from "@/lib/site";
 
 const nav = [
   { href: "/#services", label: "Services" },
-  { href: "/#work", label: "Our Work" },
   { href: "/#process", label: "Process" },
-  { href: "/#about", label: "About Us" },
+  { href: "/#work", label: "Our Work" },
+  { href: "/#testimonials", label: "Testimonials" },
+  { href: "/#industries", label: "Industries" },
+  { href: "/#faq", label: "FAQ" },
   { href: "/#contact", label: "Contact" },
 ];
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[#dbe4f0] bg-[#0b1c2c] text-white">
+    <footer className="border-t border-[#0f766e]/40 bg-[#041c22] text-white">
       <div className="mx-auto grid max-w-7xl gap-12 px-5 py-16 md:grid-cols-[1.5fr_1fr_1fr] md:gap-10 md:px-8">
         <div>
-          <p className="font-display text-2xl font-extrabold tracking-tight">
-            CodeAI <span className="text-[#6ea8ff]">Cloud</span>
-          </p>
+          <Link href="/" className="font-display text-2xl font-extrabold tracking-tight text-white">
+            CodeAI <span className="text-[#5eead4]">Cloud</span>
+          </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/65">
             Custom mobile app development company in Hyderabad — Android, iOS, cross-platform,
             UI/UX, and business applications built to ship.
           </p>
           <Link
             href="/#contact"
-            className="mt-7 inline-flex items-center justify-center bg-[#2f6fed] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#3b7cf0]"
+            className="mt-7 inline-flex items-center justify-center rounded-lg bg-gradient-to-br from-[#0f766e] to-[#0e7490] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-110"
           >
             Get Free Consultation
           </Link>
@@ -49,19 +57,16 @@ export default function Footer() {
           </p>
           <ul className="mt-4 space-y-2.5 text-sm">
             <li>
-              <a href="tel:+918328670576" className="text-white/75 hover:text-white">
-                8328670576
+              <a href={`tel:${SITE_PHONE}`} className="text-white/75 hover:text-white">
+                {SITE_PHONE_DISPLAY}
               </a>
             </li>
             <li>
-              <a
-                href="mailto:kalyansrinivas.it@gmail.com"
-                className="break-all text-white/75 hover:text-white"
-              >
-                kalyansrinivas.it@gmail.com
+              <a href={`mailto:${SITE_EMAIL}`} className="break-all text-white/75 hover:text-white">
+                {SITE_EMAIL}
               </a>
             </li>
-            <li className="text-white/55">Hyderabad, India</li>
+            <li className="text-white/55">{SITE_LOCALITY}, India</li>
           </ul>
         </div>
       </div>

@@ -2,19 +2,22 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 const primary = [
   { href: "/#services", label: "Services" },
-  { href: "/#work", label: "Our Work" },
   { href: "/#process", label: "Process" },
-  { href: "/#about", label: "About Us" },
+  { href: "/#work", label: "Our Work" },
+  { href: "/#testimonials", label: "Testimonials" },
+  { href: "/#industries", label: "Industries" },
+  { href: "/#faq", label: "FAQ" },
   { href: "/#contact", label: "Contact" },
 ];
 
 export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const menuId = useId();
 
   useEffect(() => {
     setOpen(false);
@@ -28,7 +31,7 @@ export default function Header() {
   }, [open]);
 
   return (
-    <header className="landing-header fixed inset-x-0 top-0 z-50 border-b border-[#dbe4f0] bg-white/95 shadow-[0_8px_30px_rgba(15,40,80,0.06)] backdrop-blur-md">
+    <header className="landing-header fixed inset-x-0 top-0 z-50 border-b border-[#9fd4cb]/55 bg-[#eaf7f4]/92 shadow-[0_10px_36px_rgba(4,28,34,0.08)] backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5 md:px-8">
         <Link href="/" className="landing-brand shrink-0" aria-label="CodeAI Cloud home">
           <span className="landing-brand-mark" aria-hidden="true" />
@@ -37,7 +40,7 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
           {primary.map((link) => (
             <Link key={link.href} href={link.href} className="landing-nav-link">
               {link.label}
@@ -55,8 +58,9 @@ export default function Header() {
           type="button"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
+          aria-controls={menuId}
           onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 items-center justify-center text-[#0f1a26] md:hidden"
+          className="flex h-11 w-11 items-center justify-center text-[#062a32] lg:hidden"
         >
           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
             {open ? (
@@ -69,7 +73,8 @@ export default function Header() {
       </div>
 
       <div
-        className={`overflow-hidden border-t border-[#dbe4f0] bg-white transition-[max-height,opacity] duration-300 ease-out md:hidden ${
+        id={menuId}
+        className={`overflow-hidden border-t border-[#9fd4cb]/55 bg-[#eaf7f4] transition-[max-height,opacity] duration-300 ease-out lg:hidden ${
           open ? "max-h-[100dvh] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
@@ -78,7 +83,7 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="py-3 text-lg font-medium tracking-tight text-[#0f1a26]"
+              className="py-3 text-lg font-medium tracking-tight text-[#062a32]"
               onClick={() => setOpen(false)}
             >
               {link.label}

@@ -1,6 +1,17 @@
 import Link from "next/link";
 import LandingInquiryForm from "@/components/LandingInquiryForm";
 import LandingFaq from "@/components/LandingFaq";
+import { landingFaqs } from "@/data/landing-faqs";
+import {
+  SITE_EMAIL,
+  SITE_LOCALITY,
+  SITE_NAME,
+  SITE_PHONE,
+  SITE_PHONE_DISPLAY,
+  SITE_REGION,
+  SITE_COUNTRY,
+  SITE_URL,
+} from "@/lib/site";
 
 const valueCards = [
   {
@@ -69,6 +80,7 @@ const work = [
     label: "Custom Web Application",
     detail: "Reimagines casework with secure documents, communication, and advocate diary.",
     url: "https://justicehome.in/",
+    theme: "india" as const,
   },
 ];
 
@@ -102,6 +114,23 @@ const industries = [
   "Service Businesses",
 ];
 
+const testimonials = [
+  {
+    quote:
+      "Our clinic management system changed how we run day to day — patients, billing, inventory, and reports in one place. The team understood dental operations and delivered software we actually use.",
+    name: "Clinic Leadership",
+    role: "Galaxy Dental Care",
+    href: "https://galaxydentalcare.in/",
+  },
+  {
+    quote:
+      "JusticeHome gave our advocates a clear way to manage cases, documents, internal communication, and the senior diary. We can see assignments and events without chasing files across desks.",
+    name: "Practice Team",
+    role: "JusticeHome",
+    href: "https://justicehome.in/",
+  },
+];
+
 const heroChecks = [
   "Custom Android & iOS Applications",
   "UI/UX Design",
@@ -109,9 +138,77 @@ const heroChecks = [
   "Business Efficiency Solutions",
 ];
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      email: SITE_EMAIL,
+      telephone: SITE_PHONE,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: SITE_LOCALITY,
+        addressRegion: SITE_REGION,
+        addressCountry: SITE_COUNTRY,
+      },
+      areaServed: {
+        "@type": "City",
+        name: SITE_LOCALITY,
+      },
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": `${SITE_URL}/#localbusiness`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      image: `${SITE_URL}/opengraph-image`,
+      telephone: SITE_PHONE,
+      email: SITE_EMAIL,
+      priceRange: "$$",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: SITE_LOCALITY,
+        addressRegion: SITE_REGION,
+        addressCountry: SITE_COUNTRY,
+      },
+      description:
+        "Custom mobile app development company in Hyderabad specializing in Android, iOS, cross-platform, UI/UX, and business applications.",
+      parentOrganization: { "@id": `${SITE_URL}/#organization` },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: SITE_NAME,
+      publisher: { "@id": `${SITE_URL}/#organization` },
+      inLanguage: "en-IN",
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${SITE_URL}/#faq`,
+      mainEntity: landingFaqs.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.a,
+        },
+      })),
+    },
+  ],
+};
+
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* Hero */}
       <section className="landing-hero">
         <div className="landing-shell landing-hero-grid">
@@ -157,12 +254,16 @@ export default function Home() {
       </section>
 
       {/* Value cards */}
-      <section className="landing-section">
+      <section className="landing-section" aria-labelledby="why-heading">
         <div className="landing-shell">
+          <div className="landing-section-head">
+            <p className="landing-kicker">Why CodeAI Cloud</p>
+            <h2 id="why-heading">Built for businesses that need software that ships.</h2>
+          </div>
           <ul className="landing-value-grid">
             {valueCards.map((card) => (
               <li key={card.title} className="landing-value-card">
-                <h2>{card.title}</h2>
+                <h3>{card.title}</h3>
                 <p>{card.copy}</p>
               </li>
             ))}
@@ -237,23 +338,109 @@ export default function Home() {
             <h2>Real software in production.</h2>
           </div>
           <ul className="landing-work-grid">
-            {work.map((item) => (
-              <li key={item.name} className="landing-work-card">
-                <p className="landing-kicker">{item.label}</p>
-                <h3>
-                  <a href={item.url} target="_blank" rel="noopener noreferrer">
-                    {item.name}
-                  </a>
-                </h3>
-                <p>{item.detail}</p>
-                <a
-                  href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="landing-work-link"
+            {work.map((item) => {
+              const india = "theme" in item && item.theme === "india";
+              return (
+                <li
+                  key={item.name}
+                  className={`landing-work-card ${india ? "landing-work-card-india client-card-india" : ""}`}
                 >
-                  {item.url.replace(/^https?:\/\//, "").replace(/\/$/, "")} →
-                </a>
+                  {india ? (
+                    <svg className="ashoka-chakra" viewBox="0 0 100 100" aria-hidden="true">
+                      <g className="ashoka-chakra-spin">
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="46"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.2"
+                        />
+                        <circle cx="50" cy="50" r="5" fill="currentColor" />
+                        {Array.from({ length: 24 }).map((_, i) => {
+                          const angle = (i * 15 * Math.PI) / 180;
+                          return (
+                            <line
+                              key={i}
+                              x1="50"
+                              y1="50"
+                              x2={50 + Math.cos(angle) * 42}
+                              y2={50 + Math.sin(angle) * 42}
+                              stroke="currentColor"
+                              strokeWidth="1.6"
+                              strokeLinecap="round"
+                            />
+                          );
+                        })}
+                        {Array.from({ length: 24 }).map((_, i) => {
+                          const angle = (i * 15 * Math.PI) / 180;
+                          return (
+                            <circle
+                              key={`tip-${i}`}
+                              cx={50 + Math.cos(angle) * 42}
+                              cy={50 + Math.sin(angle) * 42}
+                              r="1.8"
+                              fill="currentColor"
+                            />
+                          );
+                        })}
+                      </g>
+                    </svg>
+                  ) : null}
+                  <div className={india ? "relative z-10" : undefined}>
+                    <p className={`landing-kicker ${india ? "landing-kicker-india" : ""}`}>
+                      {item.label}
+                    </p>
+                    <h3>
+                      <a href={item.url} target="_blank" rel="noopener noreferrer">
+                        {item.name}
+                      </a>
+                    </h3>
+                    <p>{item.detail}</p>
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`landing-work-link ${india ? "landing-work-link-india" : ""}`}
+                    >
+                      {item.url.replace(/^https?:\/\//, "").replace(/\/$/, "")} →
+                    </a>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section id="testimonials" className="landing-section scroll-mt-24">
+        <div className="landing-shell">
+          <div className="landing-section-head">
+            <p className="landing-kicker">Testimonials</p>
+            <h2>What partners say when the software ships.</h2>
+          </div>
+          <ul className="landing-testimonial-grid">
+            {testimonials.map((item, index) => (
+              <li key={item.role} className="landing-testimonial-card">
+                <span className="landing-testimonial-index">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <blockquote>&ldquo;{item.quote}&rdquo;</blockquote>
+                <footer>
+                  <p className="landing-testimonial-name">{item.name}</p>
+                  <p className="landing-testimonial-role">{item.role}</p>
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="landing-work-link"
+                    >
+                      {item.href.replace(/^https?:\/\//, "").replace(/\/$/, "")} →
+                    </a>
+                  ) : null}
+                </footer>
               </li>
             ))}
           </ul>
@@ -283,7 +470,7 @@ export default function Home() {
       </section>
 
       {/* Industries */}
-      <section id="about" className="landing-section landing-section-muted scroll-mt-24">
+      <section id="industries" className="landing-section landing-section-muted scroll-mt-24">
         <div className="landing-shell">
           <div className="landing-section-head">
             <p className="landing-kicker">Industries</p>
@@ -308,8 +495,8 @@ export default function Home() {
               cross-platform product for your business.
             </p>
             <div className="landing-contact-meta">
-              <a href="tel:+918328670576">8328670576</a>
-              <a href="mailto:kalyansrinivas.it@gmail.com">kalyansrinivas.it@gmail.com</a>
+              <a href={`tel:${SITE_PHONE}`}>{SITE_PHONE_DISPLAY}</a>
+              <a href={`mailto:${SITE_EMAIL}`}>{SITE_EMAIL}</a>
               <p>Chat with our team · Hyderabad</p>
             </div>
           </div>
@@ -318,11 +505,11 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="landing-section">
+      <section id="faq" className="landing-section scroll-mt-24" aria-labelledby="faq-heading">
         <div className="landing-shell landing-faq-layout">
           <div className="landing-section-head">
             <p className="landing-kicker">FAQ</p>
-            <h2>Answers before you start building.</h2>
+            <h2 id="faq-heading">Answers before you start building.</h2>
           </div>
           <LandingFaq />
         </div>
@@ -337,7 +524,7 @@ export default function Home() {
             <Link href="#contact" className="btn-learn-more">
               Get Free Consultation
             </Link>
-            <a href="tel:+918328670576" className="btn-ghost">
+            <a href={`tel:${SITE_PHONE}`} className="btn-ghost">
               Call Now
             </a>
           </div>
