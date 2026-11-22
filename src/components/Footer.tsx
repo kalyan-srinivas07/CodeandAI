@@ -24,7 +24,7 @@ export default function Footer() {
           <Link href="/" className="font-display text-2xl font-extrabold tracking-tight text-white">
             CodeAI <span className="text-[#5eead4]">Cloud</span>
           </Link>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/65">
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/80">
             Custom mobile app development company in Hyderabad — Android, iOS, cross-platform,
             UI/UX, and business applications built to ship.
           </p>
@@ -37,10 +37,10 @@ export default function Footer() {
         </div>
 
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/40">
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/70">
             Quick Links
           </p>
-          <ul className="mt-4 space-y-2.5 text-sm text-white/75">
+          <ul className="mt-4 space-y-2.5 text-sm text-white/85">
             {nav.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="hover:text-white">
@@ -52,27 +52,27 @@ export default function Footer() {
         </div>
 
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/40">
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/70">
             Contact
           </p>
           <ul className="mt-4 space-y-2.5 text-sm">
             <li>
-              <a href={`tel:${SITE_PHONE}`} className="text-white/75 hover:text-white">
+              <a href={`tel:${SITE_PHONE}`} className="text-white/85 hover:text-white">
                 {SITE_PHONE_DISPLAY}
               </a>
             </li>
             <li>
-              <a href={`mailto:${SITE_EMAIL}`} className="break-all text-white/75 hover:text-white">
+              <a href={`mailto:${SITE_EMAIL}`} className="break-all text-white/85 hover:text-white">
                 {SITE_EMAIL}
               </a>
             </li>
-            <li className="text-white/55">{SITE_LOCALITY}, India</li>
+            <li className="text-white/75">{SITE_LOCALITY}, India</li>
           </ul>
         </div>
       </div>
 
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-5 text-xs text-white/45 md:flex-row md:items-center md:justify-between md:px-8">
+      <div className="border-t border-white/20">
+        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-5 text-xs text-white/70 md:flex-row md:items-center md:justify-between md:px-8">
           <p>© {new Date().getFullYear()} CodeAI Cloud. All rights reserved.</p>
           <p className="font-mono tracking-wide">Android · iOS · Cross-Platform</p>
         </div>
