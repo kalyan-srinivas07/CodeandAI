@@ -26,12 +26,12 @@ const valueCards = [
     copy: "Tailored mobile app development shaped around your workflows, users, and business goals.",
   },
   {
-    title: "Modern Technologies",
-    copy: "Built with current frameworks and cloud services so your product stays fast and maintainable.",
+    title: "Affordable Applications",
+    copy: "Clear pricing and scoped delivery so you get an affordable mobile application without cutting quality.",
   },
   {
-    title: "Client-Focused Development",
-    copy: "Transparent communication, honest estimates, and delivery you can track at every milestone.",
+    title: "Modern Technologies",
+    copy: "Built with current frameworks and cloud services so your product stays fast and maintainable.",
   },
   {
     title: "Scalable Architecture",
@@ -140,9 +140,9 @@ const testimonials = [
 
 const heroChecks = [
   "Custom Android & iOS Applications",
+  "Affordable Mobile Applications",
   "UI/UX Design",
   "Scalable App Architecture",
-  "Business Efficiency Solutions",
 ];
 
 const jsonLd = {
@@ -221,10 +221,13 @@ export default function Home() {
         <div className="landing-shell landing-hero-grid">
           <div>
             <p className="landing-kicker">CodeAI Cloud · Hyderabad</p>
-            <h1>Custom Mobile App Development Company in Hyderabad</h1>
+            <h1>
+              <span className="landing-hero-line">Custom Mobile App Development Company</span>
+              <span className="landing-hero-line landing-hero-line-loc">in Hyderabad</span>
+            </h1>
             <p className="landing-lead">
-              Transform your business ideas into powerful mobile applications with custom app
-              design and development solutions tailored to your business goals.
+              Transform your business ideas into powerful, affordable mobile applications with
+              custom app design and development solutions tailored to your business goals.
             </p>
             <ul className="landing-checks">
               {heroChecks.map((item) => (
@@ -498,8 +501,8 @@ export default function Home() {
             <p className="landing-kicker landing-kicker-on-dark">Inquiry</p>
             <h2>Have an App Idea? Let&apos;s Build It Together.</h2>
             <p>
-              Share your requirements and we&apos;ll help you plan the right Android, iOS, or
-              cross-platform product for your business.
+              Share your requirements and we&apos;ll help you plan an affordable application —
+              Android, iOS, or cross-platform — built for your business.
             </p>
             <div className="landing-contact-meta">
               <a href={`tel:${SITE_PHONE}`}>{SITE_PHONE_DISPLAY}</a>
@@ -526,7 +529,10 @@ export default function Home() {
       <section className="landing-final-cta">
         <div className="landing-shell">
           <h2>Ready to Build Your Mobile Application?</h2>
-          <p>Get a free consultation and a clear path from idea to launch.</p>
+          <p>
+            Get a free consultation and a clear path to an affordable mobile application —
+            from idea to launch.
+          </p>
           <div className="landing-cta-row">
             <Link href="#contact" className="btn-learn-more">
               Get Free Consultation

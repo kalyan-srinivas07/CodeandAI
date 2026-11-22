@@ -2115,12 +2115,22 @@ textarea.field {
 
 .landing-hero h1 {
   margin: 0;
-  max-width: 16ch;
+  max-width: 100%;
   font-family: var(--font-syne), sans-serif;
-  font-size: clamp(2.2rem, 5vw, 3.6rem);
-  line-height: 1.08;
+  line-height: 1.12;
   letter-spacing: -0.03em;
   color: #041c22;
+}
+
+.landing-hero-line {
+  display: block;
+  white-space: nowrap;
+  font-size: clamp(1.1rem, 3vw, 2.35rem);
+}
+
+.landing-hero-line-loc {
+  margin-top: 0.12em;
+  font-size: clamp(1.15rem, 3.2vw, 2.5rem);
 }
 
 .landing-lead {
