@@ -37,6 +37,7 @@ const stories = [
   {
     name: "JusticeHome",
     detail: "Reimagines casework with secure documents, communication, and advocate diary.",
+    url: "https://justicehome.in/",
   },
 ];
 

@@ -33,6 +33,7 @@ const featuredClients: {
   {
     name: "JusticeHome",
     product: "Custom Web Application",
+    url: "https://justicehome.in/",
     theme: "india",
     features: [
       "Secure Case & Document Management",
@@ -166,7 +167,9 @@ export default function ClientsPage() {
                         className={`link-underline mt-3 inline-block text-sm ${
                           purple
                             ? "text-white/80 hover:text-white"
-                            : "text-ink/65 hover:text-ink"
+                            : india
+                              ? "text-[#0b1a4a]/75 hover:text-[#0b1a4a]"
+                              : "text-ink/65 hover:text-ink"
                         }`}
                       >
                         {client.url.replace(/^https?:\/\//, "").replace(/\/$/, "")} →

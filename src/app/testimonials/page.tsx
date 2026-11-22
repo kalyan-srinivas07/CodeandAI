@@ -26,6 +26,7 @@ const testimonials: {
       "JusticeHome gave our advocates a clear way to manage cases, documents, internal communication, and the senior diary. We can see assignments and events without chasing files across desks.",
     name: "Practice Team",
     role: "JusticeHome",
+    href: "https://justicehome.in/",
   },
 ];
 
