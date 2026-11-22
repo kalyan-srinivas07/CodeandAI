@@ -24,11 +24,11 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "CodeandAI — Awaken Code. Drive Intelligence.",
+    default: "CodeandAI — Idea to Application",
     template: "%s · CodeandAI",
   },
   description:
-    "CodeandAI is a software and applied AI studio. We build products where craftsmanship and intelligence work as one system.",
+    "We develop web applications, Android apps, and iPhone apps that help organizations transform, compete, and grow with confidence.",
 };
 
 export default function RootLayout({

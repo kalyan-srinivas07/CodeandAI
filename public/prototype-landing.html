@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code & AI — Climbing Story</title>
+  <style>
+    :root {
+      --bg: #070b12;
+      --ink: #f4f7fb;
+      --mute: rgba(244, 247, 251, 0.68);
+      --line: rgba(255, 255, 255, 0.14);
+      --brand: #6ea8ff;
+      --accent: #f0c75e;
+      --panel: rgba(255, 255, 255, 0.05);
+      --font-sans: "Segoe UI", system-ui, -apple-system, sans-serif;
+      --font-display: Georgia, "Times New Roman", serif;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --nav-h: 72px;
+      --step-ms: 2000;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      border: 0;
+      background: transparent;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+
+    .container.story {
+      width: min(1280px, calc(100% - 2.5rem));
+    }
+
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 50;
+      height: var(--nav-h);
+      border-bottom: 1px solid var(--line);
+      background: rgba(7, 11, 18, 0.72);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-size: 1.15rem;
+    }
+
+    .brand span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 1.25rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links a {
+      font-size: 0.92rem;
+      color: var(--mute);
+      transition: color 0.25s var(--ease);
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible,
+    .nav-links a.is-active {
+      color: var(--ink);
+      outline: none;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .search-trigger,
+    .menu-trigger {
+      width: 2.5rem;
+      height: 2.5rem;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+
+    .menu-trigger {
+      display: inline-grid;
+    }
+
+    .mobile-panel {
+      display: none;
+      border-top: 1px solid var(--line);
+      background: rgba(7, 11, 18, 0.96);
+      padding: 1rem 0 1.25rem;
+    }
+
+    .mobile-panel.is-open {
+      display: block;
+    }
+
+    .mobile-panel a {
+      display: block;
+      padding: 0.75rem 0;
+      color: var(--mute);
+    }
+
+    /* One continuous video stage */
+    .stage {
+      position: relative;
+      height: 100vh;
+      height: 100svh;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .stage-bg {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(ellipse 60% 50% at 72% 38%, rgba(110, 168, 255, 0.26), transparent 60%),
+        radial-gradient(ellipse 45% 40% at 18% 72%, rgba(240, 199, 94, 0.12), transparent 55%),
+        linear-gradient(145deg, #0a1220 0%, #101a2c 45%, #070b12 100%);
+      transition: filter 0.8s var(--ease);
+    }
+
+    .stage-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(5, 8, 13, 0.88) 0%, rgba(5, 8, 13, 0.55) 55%, rgba(5, 8, 13, 0.38) 100%),
+        linear-gradient(180deg, rgba(5, 8, 13, 0.48) 0%, transparent 30%, rgba(5, 8, 13, 0.78) 100%);
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(40px);
+      opacity: 0.4;
+      animation: float 12s ease-in-out infinite;
+      z-index: -1;
+      will-change: transform, opacity;
+    }
+
+    .orb.one {
+      width: 280px;
+      height: 280px;
+      top: 14%;
+      left: 8%;
+      background: rgba(110, 168, 255, 0.45);
+    }
+
+    .orb.two {
+      width: 240px;
+      height: 240px;
+      right: 10%;
+      bottom: 16%;
+      background: rgba(240, 199, 94, 0.2);
+      animation-delay: -4s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.35; }
+      50% { transform: translate3d(16px, -20px, 0) scale(1.08); opacity: 0.65; }
+    }
+
+    /* Climbing staircase — bottom band only, drifts right → left */
+    .climb {
+      position: absolute;
+      bottom: 1.25rem;
+      width: min(200px, 30vw);
+      height: min(260px, 34vh);
+      z-index: 1;
+      pointer-events: none;
+      left: var(--climb-left, calc(100% - min(200px, 30vw) - max(1rem, calc((100% - 1120px) / 2))));
+      transition: left 0.9s var(--ease), transform 0.9s var(--ease);
+      will-change: left, transform;
+    }
+
+    .climb svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      transition: transform 0.9s var(--ease);
+      transform-origin: center center;
+    }
+
+    .step-block {
+      fill: rgba(255, 255, 255, 0.05);
+      stroke: rgba(255, 255, 255, 0.16);
+      stroke-width: 1.5;
+      transition: fill 0.55s var(--ease), stroke 0.55s var(--ease), filter 0.55s var(--ease);
+    }
+
+    .step-block.is-done {
+      fill: rgba(110, 168, 255, 0.18);
+      stroke: rgba(110, 168, 255, 0.55);
+    }
+
+    .step-block.is-current {
+      fill: rgba(240, 199, 94, 0.22);
+      stroke: rgba(240, 199, 94, 0.9);
+      filter: drop-shadow(0 0 12px rgba(240, 199, 94, 0.35));
+    }
+
+    .climber {
+      fill: var(--brand);
+      filter: drop-shadow(0 6px 12px rgba(110, 168, 255, 0.45));
+      transition: transform 0.85s var(--ease);
+      will-change: transform;
+    }
+
+    .climb-label {
+      fill: var(--mute);
+      font-size: 11px;
+      font-family: var(--font-sans);
+      letter-spacing: 0.08em;
+      transition: fill 0.4s var(--ease);
+    }
+
+    .climb-label.is-current {
+      fill: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Full-width copy sits above the stair band — no overlap */
+    .story {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: grid;
+      align-items: start;
+      justify-items: stretch;
+      padding-top: calc(var(--nav-h) + 1.75rem);
+      padding-bottom: calc(min(260px, 34vh) + 2.5rem);
+    }
+
+    .frames {
+      position: relative;
+      width: 100%;
+      min-height: 12rem;
+      text-align: left;
+    }
+
+    .stage[data-step="0"] {
+      --climb-left: calc(100% - min(200px, 30vw) - max(1rem, calc((100% - 1120px) / 2)));
+    }
+
+    .stage[data-step="1"] {
+      --climb-left: 62%;
+    }
+
+    .stage[data-step="2"] {
+      --climb-left: 44%;
+    }
+
+    .stage[data-step="3"] {
+      --climb-left: 22%;
+    }
+
+    .stage[data-step="4"] {
+      --climb-left: max(1rem, calc((100% - 1120px) / 2));
+    }
+
+    .frame {
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transform: translate3d(0, 40px, 0) scale(0.98);
+      transition:
+        opacity 0.65s var(--ease),
+        transform 0.85s var(--ease),
+        visibility 0.65s;
+      pointer-events: none;
+      will-change: opacity, transform;
+    }
+
+    .frame.is-active {
+      opacity: 1;
+      visibility: visible;
+      transform: translate3d(0, 0, 0) scale(1);
+      pointer-events: auto;
+      position: relative;
+    }
+
+    .frame.is-passed {
+      opacity: 0;
+      visibility: hidden;
+      transform: translate3d(0, -36px, 0) scale(0.98);
+    }
+
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .frame h1,
+    .frame h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5.5vw, 4rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      font-weight: 700;
+      max-width: 100%;
+      width: 100%;
+    }
+
+    .frame h2 {
+      font-size: clamp(1.9rem, 4.5vw, 3.1rem);
+    }
+
+    .frame .lead {
+      margin: 1rem 0 0;
+      max-width: 100%;
+      width: min(54rem, 100%);
+      color: var(--mute);
+      font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1.4rem;
+      padding: 0.85rem 1.35rem;
+      border-radius: 999px;
+      background: var(--brand);
+      color: #06101d;
+      font-weight: 700;
+      transition: transform 0.25s var(--ease), background-color 0.25s var(--ease);
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      background: #8bbcff;
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      margin-left: 0.55rem;
+    }
+
+    .caps {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 1.35rem;
+    }
+
+    .card {
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .card .meta {
+      display: inline-block;
+      margin-bottom: 0.35rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .card h3 {
+      margin: 0 0 0.35rem;
+      font-size: 1.05rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--mute);
+      font-size: 0.9rem;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      list-style: none;
+      margin: 1.25rem 0 0;
+      padding: 0;
+    }
+
+    .contact-links a {
+      color: var(--mute);
+      border-bottom: 1px solid transparent;
+    }
+
+    .contact-links a:hover,
+    .contact-links a:focus-visible {
+      color: var(--ink);
+      border-bottom-color: var(--accent);
+      outline: none;
+    }
+
+    .contact-layout {
+      display: grid;
+      gap: 1.5rem;
+      margin-top: 1.25rem;
+      width: 100%;
+    }
+
+    .contact-form {
+      display: grid;
+      gap: 0.85rem;
+      width: 100%;
+      max-width: 42rem;
+      padding: 1.15rem 1.2rem;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .contact-form .field {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .contact-form label {
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mute);
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 0.75rem 0.85rem;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: rgba(5, 8, 13, 0.55);
+      color: var(--ink);
+      font: inherit;
+      outline: none;
+      transition: border-color 0.25s var(--ease);
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: rgba(110, 168, 255, 0.65);
+    }
+
+    .contact-form textarea {
+      min-height: 6.5rem;
+      resize: vertical;
+    }
+
+    .contact-form .form-row {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .contact-form .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    .contact-form .btn {
+      margin-top: 0;
+    }
+
+    .form-note {
+      margin: 0;
+      color: var(--mute);
+      font-size: 0.9rem;
+    }
+
+    .form-status {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--accent);
+      min-height: 1.2em;
+    }
+
+    .form-status.is-error {
+      color: #ff8f8f;
+    }
+
+    .sr-honey {
+      position: absolute;
+      left: -9999px;
+      height: 0;
+      width: 0;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .contact-form .btn:disabled {
+      opacity: 0.65;
+      cursor: wait;
+      transform: none;
+    }
+
+    @media (min-width: 768px) {
+      .nav-links { display: flex; }
+      .menu-trigger { display: none; }
+      .caps { grid-template-columns: repeat(3, 1fr); }
+      .contact-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+        align-items: start;
+      }
+
+      .contact-form {
+        max-width: none;
+        justify-self: stretch;
+      }
+      .contact-form .form-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .climb {
+        width: min(150px, 36vw);
+        height: min(200px, 30vh);
+      }
+
+      .story {
+        padding-bottom: calc(min(200px, 30vh) + 1.5rem);
+      }
+
+      .frame h1,
+      .frame h2 {
+        font-size: clamp(1.85rem, 8vw, 2.6rem);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .frame,
+      .orb,
+      .climber,
+      .step-block,
+      .climb,
+      .climb svg,
+      .btn {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      .frame {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header" id="siteHeader">
+    <div class="container nav-inner">
+      <a class="brand" href="#" data-step="0" aria-label="Code & AI home">
+        Code <span>&amp;</span> AI
+      </a>
+
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="#" data-step="0">Solutions</a></li>
+          <li><a href="#" data-step="3">Capabilities</a></li>
+          <li><a href="#" data-step="1">Industries</a></li>
+          <li><a href="#" data-step="4">About</a></li>
+          <li><a href="#" data-step="4">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="search-trigger" type="button" aria-label="Open search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-3.5-3.5"></path>
+          </svg>
+        </button>
+        <button class="menu-trigger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobilePanel" id="menuTrigger">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-panel" id="mobilePanel" hidden>
+      <div class="container">
+        <a href="#" data-step="0">Solutions</a>
+        <a href="#" data-step="3">Capabilities</a>
+        <a href="#" data-step="1">Industries</a>
+        <a href="#" data-step="4">About</a>
+        <a href="#" data-step="4">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="stage" id="stage" data-step="0" aria-label="Code & AI climbing story video">
+    <div class="stage-bg" aria-hidden="true">
+      <div class="orb one"></div>
+      <div class="orb two"></div>
+    </div>
+
+    <!-- Single climb path: steps 1 → 5 -->
+    <aside class="climb" aria-hidden="true">
+      <svg viewBox="0 0 220 340" role="img">
+        <!-- Rising staircase -->
+        <rect class="step-block" data-step="0" x="20"  y="280" width="180" height="42" rx="6"></rect>
+        <rect class="step-block" data-step="1" x="40"  y="220" width="160" height="42" rx="6"></rect>
+        <rect class="step-block" data-step="2" x="60"  y="160" width="140" height="42" rx="6"></rect>
+        <rect class="step-block" data-step="3" x="80"  y="100" width="120" height="42" rx="6"></rect>
+        <rect class="step-block" data-step="4" x="100" y="40"  width="100" height="42" rx="6"></rect>
+
+        <text class="climb-label" data-step="0" x="30"  y="306">01</text>
+        <text class="climb-label" data-step="1" x="50"  y="246">02</text>
+        <text class="climb-label" data-step="2" x="70"  y="186">03</text>
+        <text class="climb-label" data-step="3" x="90"  y="126">04</text>
+        <text class="climb-label" data-step="4" x="110" y="66">05</text>
+
+        <!-- Climber marker moves up the stairs -->
+        <circle class="climber" id="climber" cx="170" cy="301" r="9"></circle>
+      </svg>
+    </aside>
+
+    <div class="container story">
+      <div class="frames" id="frames">
+        <!-- Step 1 -->
+        <article class="frame is-active" data-step="0" aria-hidden="false">
+          <p class="eyebrow">Step 01 · Climb</p>
+          <h1>Build digital products that scale with your business.</h1>
+          <p class="lead">Modern web, Android, and iPhone applications engineered for performance, security, and long-term growth.</p>
+          <button class="btn" type="button" data-step="1">Climb to next</button>
+        </article>
+
+        <!-- Step 2 -->
+        <article class="frame" data-step="1" aria-hidden="true">
+          <p class="eyebrow">Step 02 · Climb</p>
+          <h1>From strategy to software — delivered end to end.</h1>
+          <p class="lead">Consult, design, and engineer enterprise-ready systems that turn complex workflows into clear digital experiences.</p>
+          <button class="btn" type="button" data-step="2">Climb to next</button>
+        </article>
+
+        <!-- Step 3 -->
+        <article class="frame" data-step="2" aria-hidden="true">
+          <p class="eyebrow">Step 03 · Climb</p>
+          <h1>Trusted technology for organizations ready to lead.</h1>
+          <p class="lead">Partner with Code &amp; AI to launch platforms that create measurable outcomes across teams and customers.</p>
+          <button class="btn" type="button" data-step="3">Climb to next</button>
+        </article>
+
+        <!-- Step 4 -->
+        <article class="frame" data-step="3" aria-hidden="true">
+          <p class="eyebrow">Step 04 · Climb</p>
+          <h2>Core capabilities</h2>
+          <p class="lead">Three foundations that carry every engagement from idea to production.</p>
+          <div class="caps">
+            <article class="card">
+              <span class="meta">01 / Web</span>
+              <h3>Web applications</h3>
+              <p>Enterprise portals, dashboards, and customer platforms.</p>
+            </article>
+            <article class="card">
+              <span class="meta">02 / Mobile</span>
+              <h3>Android &amp; iPhone</h3>
+              <p>Secure mobile products with store-ready release support.</p>
+            </article>
+            <article class="card">
+              <span class="meta">03 / Enterprise</span>
+              <h3>Transformation</h3>
+              <p>Custom systems that modernize operations and decisions.</p>
+            </article>
+          </div>
+        </article>
+
+        <!-- Step 5 -->
+        <article class="frame" data-step="4" aria-hidden="true">
+          <p class="eyebrow">Step 05 · Summit</p>
+          <h2>Let’s build what’s next.</h2>
+          <p class="lead">Share your project details in the form below — or reach Code &amp; AI directly by email or phone.</p>
+
+          <div class="contact-layout">
+            <div class="contact-copy">
+              <p class="form-note">Prefer a direct line? Use the contacts below and we’ll respond promptly.</p>
+              <a class="btn" href="mailto:kalyansrinivas.it@gmail.com">Email us</a>
+              <a class="btn btn-ghost" href="tel:+918328670576">8328670576</a>
+              <ul class="contact-links">
+                <li><a href="mailto:kalyansrinivas.it@gmail.com">Email</a></li>
+                <li><a href="tel:+918328670576">Call</a></li>
+              </ul>
+            </div>
+
+            <form class="contact-form" id="contactForm" action="mailto:kalyansrinivas.it@gmail.com" method="post" enctype="text/plain">
+              <div class="form-row">
+                <div class="field">
+                  <label for="contactName">Name</label>
+                  <input id="contactName" name="name" type="text" autocomplete="name" required placeholder="Your name" />
+                </div>
+                <div class="field">
+                  <label for="contactEmail">Email</label>
+                  <input id="contactEmail" name="email" type="email" autocomplete="email" required placeholder="you@company.com" />
+                </div>
+              </div>
+              <div class="field">
+                <label for="contactPhone">Phone</label>
+                <input id="contactPhone" name="phone" type="tel" autocomplete="tel" placeholder="Optional" />
+              </div>
+              <div class="field">
+                <label for="contactMessage">Message</label>
+                <textarea id="contactMessage" name="message" required placeholder="Tell us about your web, mobile, or enterprise need"></textarea>
+              </div>
+              <div class="form-actions">
+                <button class="btn" type="submit" id="sendMessageBtn">Send message</button>
+                <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+              </div>
+            </form>
+          </div>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      const TOTAL = 5;
+      const frames = Array.from(document.querySelectorAll(".frame"));
+      const blocks = Array.from(document.querySelectorAll(".step-block"));
+      const labels = Array.from(document.querySelectorAll(".climb-label"));
+      const climber = document.getElementById("climber");
+      const stage = document.getElementById("stage");
+      const menuTrigger = document.getElementById("menuTrigger");
+      const mobilePanel = document.getElementById("mobilePanel");
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const stepMs = reduceMotion ? 0 : Number(getComputedStyle(document.documentElement).getPropertyValue("--step-ms")) || 2000;
+
+      /* Marker rises each step; stairs themselves slide via CSS data-step */
+      const climbPath = [
+        { x: 170, y: 301 },
+        { x: 170, y: 241 },
+        { x: 170, y: 181 },
+        { x: 170, y: 121 },
+        { x: 170, y: 61 }
+      ];
+
+      let step = 0;
+      let playing = !reduceMotion;
+      let raf = null;
+      let startedAt = 0;
+      let elapsed = 0;
+
+      function paintClimb(active) {
+        blocks.forEach((el) => {
+          const i = Number(el.dataset.step);
+          el.classList.toggle("is-current", i === active);
+          el.classList.toggle("is-done", i < active);
+        });
+        labels.forEach((el) => {
+          el.classList.toggle("is-current", Number(el.dataset.step) === active);
+        });
+        const point = climbPath[active];
+        climber.setAttribute("cx", point.x);
+        climber.setAttribute("cy", point.y);
+        stage.setAttribute("data-step", String(active));
+      }
+
+      function goTo(nextStep) {
+        step = Math.max(0, Math.min(TOTAL - 1, nextStep));
+
+        frames.forEach((frame, i) => {
+          const active = i === step;
+          const passed = i < step;
+          frame.classList.toggle("is-active", active);
+          frame.classList.toggle("is-passed", passed && !active);
+          frame.setAttribute("aria-hidden", active ? "false" : "true");
+        });
+
+        document.querySelectorAll(".nav-links a, .mobile-panel a").forEach((link) => {
+          link.classList.toggle("is-active", Number(link.dataset.step) === step);
+        });
+
+        paintClimb(step);
+        elapsed = 0;
+        startedAt = performance.now();
+
+        /* Stop once we reach the summit (step 5) */
+        if (step >= TOTAL - 1) {
+          setPlaying(false);
+          return;
+        }
+
+        if (playing) startClock();
+        else stopClock();
+      }
+
+      function tick(now) {
+        if (!playing) return;
+        elapsed = now - startedAt;
+
+        if (elapsed >= stepMs) {
+          goTo(step + 1);
+          return;
+        }
+        raf = requestAnimationFrame(tick);
+      }
+
+      function startClock() {
+        stopClock();
+        if (reduceMotion || !playing) return;
+        startedAt = performance.now() - elapsed;
+        raf = requestAnimationFrame(tick);
+      }
+
+      function stopClock() {
+        if (raf) {
+          cancelAnimationFrame(raf);
+          raf = null;
+        }
+      }
+
+      function setPlaying(next) {
+        playing = next;
+        if (playing) startClock();
+        else stopClock();
+      }
+
+      function jump(event) {
+        const target = event.target.closest("[data-step]");
+        if (!target) return;
+        event.preventDefault();
+        const next = Number(target.dataset.step);
+        if (next < TOTAL - 1) playing = true;
+        goTo(next);
+      }
+
+      menuTrigger.addEventListener("click", () => {
+        const open = mobilePanel.hasAttribute("hidden");
+        mobilePanel.hidden = !open;
+        mobilePanel.classList.toggle("is-open", open);
+        menuTrigger.setAttribute("aria-expanded", open ? "true" : "false");
+        menuTrigger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      });
+
+      document.addEventListener("click", jump);
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          if (step < TOTAL - 1) goTo(step + 1);
+        }
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          if (step >= TOTAL - 1) return;
+          if (step > 0) goTo(step - 1);
+        }
+        if (event.key === " ") {
+          event.preventDefault();
+          if (step >= TOTAL - 1) return;
+          setPlaying(!playing);
+        }
+        if (event.key === "Escape") setPlaying(false);
+      });
+
+      let wheelLock = false;
+      document.addEventListener(
+        "wheel",
+        (event) => {
+          if (wheelLock || Math.abs(event.deltaY) < 20) return;
+          /* After final step, stay put — no reverse climb */
+          if (step >= TOTAL - 1) return;
+          wheelLock = true;
+          if (event.deltaY > 0) goTo(step + 1);
+          else if (step > 0) goTo(step - 1);
+          window.setTimeout(() => { wheelLock = false; }, 750);
+        },
+        { passive: true }
+      );
+
+      let touchY = null;
+      document.addEventListener("touchstart", (e) => {
+        touchY = e.changedTouches[0].clientY;
+      }, { passive: true });
+      document.addEventListener("touchend", (e) => {
+        if (touchY == null) return;
+        const dy = e.changedTouches[0].clientY - touchY;
+        touchY = null;
+        if (Math.abs(dy) < 50) return;
+        if (step >= TOTAL - 1) return;
+        if (dy < 0) goTo(step + 1);
+        else if (step > 0) goTo(step - 1);
+      }, { passive: true });
+
+      document.querySelector(".search-trigger").addEventListener("click", () => {
+        const query = window.prompt("Search Code & AI");
+        if (query) window.alert('Search prototype: "' + query + '"');
+      });
+
+      const contactForm = document.getElementById("contactForm");
+      const formStatus = document.getElementById("formStatus");
+      const sendBtn = document.getElementById("sendMessageBtn");
+      const MAIL_TO = "kalyansrinivas.it@gmail.com";
+
+      contactForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        formStatus.classList.remove("is-error");
+
+        const name = document.getElementById("contactName").value.trim();
+        const email = document.getElementById("contactEmail").value.trim();
+        const phone = document.getElementById("contactPhone").value.trim() || "—";
+        const message = document.getElementById("contactMessage").value.trim();
+
+        const subject = "New inquiry from Code & AI — " + name;
+        const body = [
+          "Name: " + name,
+          "Email: " + email,
+          "Phone: " + phone,
+          "",
+          "Message:",
+          message
+        ].join("\r\n");
+
+        const mailto =
+          "mailto:" + MAIL_TO +
+          "?subject=" + encodeURIComponent(subject) +
+          "&body=" + encodeURIComponent(body);
+
+        formStatus.textContent = "Opening email to " + MAIL_TO + "…";
+        sendBtn.disabled = true;
+        window.location.href = mailto;
+        window.setTimeout(() => {
+          sendBtn.disabled = false;
+          formStatus.textContent = "Email draft opened — press Send in your mail app.";
+        }, 800);
+      });
+
+      goTo(0);
+      setPlaying(playing);
+    })();
+  </script>
+</body>
+</html>

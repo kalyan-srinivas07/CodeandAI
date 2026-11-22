@@ -6,65 +6,95 @@ import { useEffect, useState } from "react";
 
 const primary = [
   { href: "/", label: "Home" },
-  { href: "/robots", label: "Robots" },
-  { href: "/contact", label: "Contact Us" },
-  { href: "/clients", label: "Our Valued Clients" },
-];
-
-const more = [
-  { href: "/technology", label: "Technology" },
-  { href: "/agents", label: "Agents" },
-  { href: "/systems", label: "Systems" },
-  { href: "/work", label: "Work" },
-  { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
+  { href: "/clients", label: "Clients" },
+  { href: "/testimonials", label: "Testimonials" },
+  { href: "/about", label: "About" },
 ];
 
 export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const isHome = pathname === "/";
 
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  function isActive(href: string) {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  }
+
+  const transparent = isHome && !scrolled && !open;
+
   return (
     <header
-      className="fixed inset-x-0 top-0 z-50 border-b border-ink/10"
-      style={{
-        backgroundColor: "#b4b9ab",
-        backgroundImage:
-          "linear-gradient(to right, rgba(180,185,171,0.45) 0%, rgba(180,185,171,0.45) 50%, rgba(212,146,147,0.45) 50%, rgba(212,146,147,0.45) 100%), url('/wall-bg.jpg')",
-        backgroundSize: "cover, cover",
-        backgroundPosition: "center, center",
-      }}
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,backdrop-filter,box-shadow] duration-300 ease-out ${
+        transparent
+          ? "border-white/10 bg-transparent"
+          : "site-header border-ink/8 shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
+      }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 md:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5 md:px-8">
         <Link
           href="/"
-          className="shrink-0 font-display text-[1.15rem] font-extrabold tracking-tight text-ink"
+          className={`brand-mark shrink-0 ${transparent ? "brand-mark-on-dark" : ""}`}
         >
-          Code<span className="font-medium text-ink/60">and</span>AI
+          Code<span className="brand-mark-and">and</span>
+          <span className="brand-mark-ai">AI</span>
         </Link>
 
-        <nav className="hidden items-center gap-5 md:flex lg:gap-7">
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
           {primary.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="link-underline whitespace-nowrap text-[13px] font-medium tracking-[0.04em] text-ink/70 hover:text-ink"
+              className={`nav-link ${transparent ? "nav-link-dark" : ""} ${
+                isActive(link.href) ? (transparent ? "nav-link-dark-active" : "nav-link-active") : ""
+              }`}
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
+        <div className="hidden items-center gap-3 md:flex">
+          <Link
+            href="/contact"
+            className={
+              transparent
+                ? "btn-learn-more !px-4 !py-2.5 text-[13px]"
+                : "btn-primary !px-4 !py-2.5 text-[13px]"
+            }
+          >
+            Start a project
+          </Link>
+        </div>
+
         <button
           type="button"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 items-center justify-center text-ink md:hidden"
+          className={`flex h-10 w-10 items-center justify-center md:hidden ${
+            transparent ? "text-white" : "text-ink"
+          }`}
         >
           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             {open ? (
@@ -77,39 +107,40 @@ export default function Header() {
       </div>
 
       <div
-        className={`overflow-hidden border-t border-ink/15 transition-all duration-300 md:hidden ${
-          open ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"
+        className={`overflow-hidden border-t transition-[max-height,opacity] duration-300 ease-out md:hidden ${
+          open ? "max-h-[100dvh] opacity-100" : "max-h-0 opacity-0"
+        } ${
+          transparent
+            ? "border-white/10 bg-[#0b1c2c]/95 backdrop-blur-md"
+            : "site-header-panel border-ink/10"
         }`}
-        style={{
-          backgroundColor: "#b4b9ab",
-          backgroundImage:
-            "linear-gradient(to right, rgba(180,185,171,0.45) 0%, rgba(180,185,171,0.45) 50%, rgba(212,146,147,0.45) 50%, rgba(212,146,147,0.45) 100%), url('/wall-bg.jpg')",
-          backgroundSize: "cover, cover",
-          backgroundPosition: "center, center",
-        }}
       >
-        <nav className="flex flex-col gap-1 px-5 py-5">
-          {primary.map((link) => (
+        <nav className="flex min-h-[70dvh] flex-col gap-1 px-5 py-6" aria-label="Mobile">
+          {[...primary, { href: "/contact", label: "Contact" }].map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="py-2.5 text-base font-medium text-ink"
+              className={`rounded-none py-3 text-lg font-medium tracking-tight transition-opacity duration-200 ${
+                transparent
+                  ? isActive(link.href)
+                    ? "text-white"
+                    : "text-white/60"
+                  : isActive(link.href)
+                    ? "text-ink"
+                    : "text-ink/55"
+              }`}
               onClick={() => setOpen(false)}
             >
               {link.label}
             </Link>
           ))}
-          <div className="my-2 border-t border-ink/15" />
-          {more.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="py-2 text-sm text-ink/70"
-              onClick={() => setOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
+          <Link
+            href="/contact"
+            className={`mt-6 w-full ${transparent ? "btn-learn-more" : "btn-primary"}`}
+            onClick={() => setOpen(false)}
+          >
+            Start a project
+          </Link>
         </nav>
       </div>
     </header>
