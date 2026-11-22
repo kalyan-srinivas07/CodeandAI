@@ -950,37 +950,72 @@
       const sendBtn = document.getElementById("sendMessageBtn");
       const MAIL_TO = "kalyansrinivas.it@gmail.com";
 
-      contactForm.addEventListener("submit", (event) => {
+      contactForm.addEventListener("submit", async (event) => {
         event.preventDefault();
         formStatus.classList.remove("is-error");
+        formStatus.textContent = "Sending…";
+        sendBtn.disabled = true;
 
         const name = document.getElementById("contactName").value.trim();
         const email = document.getElementById("contactEmail").value.trim();
         const phone = document.getElementById("contactPhone").value.trim() || "—";
         const message = document.getElementById("contactMessage").value.trim();
 
-        const subject = "New inquiry from Code & AI — " + name;
-        const body = [
-          "Name: " + name,
-          "Email: " + email,
-          "Phone: " + phone,
-          "",
-          "Message:",
-          message
-        ].join("\r\n");
+        try {
+          const response = await fetch("https://formsubmit.co/ajax/" + MAIL_TO, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json"
+            },
+            body: JSON.stringify({
+              name,
+              email,
+              phone,
+              message,
+              _subject: "New inquiry from Code & AI — " + name,
+              _template: "table",
+              _captcha: "false"
+            })
+          });
 
-        const mailto =
-          "mailto:" + MAIL_TO +
-          "?subject=" + encodeURIComponent(subject) +
-          "&body=" + encodeURIComponent(body);
+          const data = await response.json().catch(function () { return {}; });
+          var needsActivation =
+            typeof data.message === "string" &&
+            data.message.toLowerCase().indexOf("activation") !== -1;
 
-        formStatus.textContent = "Opening email to " + MAIL_TO + "…";
-        sendBtn.disabled = true;
-        window.location.href = mailto;
-        window.setTimeout(() => {
+          if (needsActivation) {
+            var subject = "New inquiry from Code & AI — " + name;
+            var body = [
+              "Name: " + name,
+              "Email: " + email,
+              "Phone: " + phone,
+              "",
+              "Message:",
+              message
+            ].join("\r\n");
+            window.location.href =
+              "mailto:" + MAIL_TO +
+              "?subject=" + encodeURIComponent(subject) +
+              "&body=" + encodeURIComponent(body);
+            throw new Error(
+              "Check Gmail/Spam for FormSubmit Activate Form, click once, then retry."
+            );
+          }
+
+          if (!response.ok || !(data.success === true || data.success === "true")) {
+            throw new Error(data.message || "Could not send message");
+          }
+
+          formStatus.textContent = "Sent to " + MAIL_TO;
+          contactForm.reset();
+        } catch (error) {
+          formStatus.classList.add("is-error");
+          formStatus.textContent =
+            error && error.message ? error.message : "Send failed. Try again.";
+        } finally {
           sendBtn.disabled = false;
-          formStatus.textContent = "Email draft opened — press Send in your mail app.";
-        }, 800);
+        }
       });
 
       goTo(0);

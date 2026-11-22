@@ -12,13 +12,71 @@ const platforms = [
   "Not sure yet",
 ] as const;
 
+const MAIL_TO = "kalyansrinivas.it@gmail.com";
+
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [platform, setPlatform] = useState<(typeof platforms)[number]>("Web app");
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSubmitted(true);
+    setError("");
+    setSending(true);
+
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const name = String(data.get("name") || "").trim();
+    const email = String(data.get("email") || "").trim();
+    const phone = String(data.get("phone") || "").trim() || "—";
+    const company = String(data.get("company") || "").trim() || "—";
+    const message = String(data.get("message") || "").trim();
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ name, email, phone, company, platform, message }),
+      });
+
+      const result = (await response.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+        needsActivation?: boolean;
+      };
+
+      if (result.needsActivation) {
+        const subject = `Code & AI inquiry — ${platform}`;
+        const body = [
+          `Name: ${name}`,
+          `Email: ${email}`,
+          `Phone: ${phone}`,
+          `Company: ${company}`,
+          `Platform: ${platform}`,
+          "",
+          message,
+        ].join("\n");
+        window.location.href = `mailto:${MAIL_TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        throw new Error(
+          "First-time setup: check Gmail/Spam for FormSubmit “Activate Form”, click it once. A mail draft was also opened as backup."
+        );
+      }
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.error || "Could not send your message. Please try again.");
+      }
+
+      setSubmitted(true);
+      form.reset();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not send your message.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -56,10 +114,10 @@ export default function ContactPage() {
                 </span>
                 <br />
                 <a
-                  href="mailto:kalyansrinivas.it@gmail.com"
+                  href={`mailto:${MAIL_TO}`}
                   className="link-underline mt-2 inline-block break-all text-base text-white md:text-lg"
                 >
-                  kalyansrinivas.it@gmail.com
+                  {MAIL_TO}
                 </a>
               </p>
             </div>
@@ -74,14 +132,21 @@ export default function ContactPage() {
           <div className="form-panel !border-0 !bg-transparent !p-0 !shadow-none">
             {submitted ? (
               <div className="flex min-h-[360px] flex-col justify-center">
-                <p className="eyebrow">Message received</p>
+                <p className="eyebrow">Message sent</p>
                 <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight text-fog md:text-3xl">
                   Thanks — we&apos;ll be in touch.
                 </h2>
                 <p className="mt-4 max-w-sm text-base leading-relaxed text-mist">
-                  Your note is ready on this device. We&apos;ll follow up on your{" "}
-                  {platform.toLowerCase()} project soon.
+                  Your {platform.toLowerCase()} inquiry was emailed to {MAIL_TO}.
+                  We typically reply within two business days.
                 </p>
+                <button
+                  type="button"
+                  className="btn-learn-more mt-8 w-fit"
+                  onClick={() => setSubmitted(false)}
+                >
+                  Send another message
+                </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -160,8 +225,14 @@ export default function ContactPage() {
                   />
                 </div>
 
-                <button type="submit" className="btn-learn-more">
-                  Send message
+                {error ? (
+                  <p className="text-sm leading-relaxed text-[#b85f62]" role="alert">
+                    {error}
+                  </p>
+                ) : null}
+
+                <button type="submit" className="btn-learn-more" disabled={sending}>
+                  {sending ? "Sending…" : "Send message"}
                 </button>
               </form>
             )}
