@@ -1,183 +1,345 @@
 import Link from "next/link";
-import AmbientHeroBackground from "@/components/AmbientHeroBackground";
-import HeroHighlightSwitcher from "@/components/HeroHighlightSwitcher";
-import AmbitionBanner from "@/components/AmbitionBanner";
-import EnterpriseLayers from "@/components/EnterpriseLayers";
-import TransformationPillars from "@/components/TransformationPillars";
+import LandingInquiryForm from "@/components/LandingInquiryForm";
+import LandingFaq from "@/components/LandingFaq";
 
-const cards = [
+const valueCards = [
   {
-    title: "Web applications",
-    copy: "Portals, dashboards, and customer platforms engineered for performance and scale.",
-    href: "/services#web",
+    title: "Custom Solutions",
+    copy: "Tailored mobile app development shaped around your workflows, users, and business goals.",
   },
   {
-    title: "Android apps",
-    copy: "Secure mobile products that keep teams and customers connected in the field.",
-    href: "/services#android",
+    title: "Modern Technologies",
+    copy: "Built with current frameworks and cloud services so your product stays fast and maintainable.",
   },
   {
-    title: "iPhone apps",
-    copy: "Premium iOS experiences designed for clarity, trust, and store-ready launch.",
-    href: "/services#iphone",
+    title: "Client-Focused Development",
+    copy: "Transparent communication, honest estimates, and delivery you can track at every milestone.",
   },
   {
-    title: "Enterprise solutions",
-    copy: "Custom systems that modernize operations, workflows, and decision-making.",
-    href: "/services#enterprise",
+    title: "Scalable Architecture",
+    copy: "Future-ready foundations that grow with new features, users, and integrations.",
   },
 ];
 
-const stories = [
+const services = [
+  {
+    title: "Android App Development",
+    copy: "Native and hybrid Android apps engineered for performance, security, and Play Store readiness.",
+  },
+  {
+    title: "iOS App Development",
+    copy: "Premium experiences for iPhone and iPad with polished interfaces and store-ready release support.",
+  },
+  {
+    title: "Cross-Platform App Development",
+    copy: "Build once and run across platforms with Flutter or React Native when shared delivery fits.",
+  },
+  {
+    title: "UI/UX Design",
+    copy: "User-centric flows and visually clear interfaces that make complex products easy to use.",
+  },
+  {
+    title: "Custom Business Applications",
+    copy: "Internal operations, workflow systems, and customer platforms built for real teams.",
+  },
+  {
+    title: "App Maintenance & Support",
+    copy: "Updates, monitoring, and ongoing improvements that keep your app secure and reliable.",
+  },
+];
+
+const processSteps = [
+  { step: "01", title: "Discovery & Planning", copy: "Clarify goals, users, scope, and success metrics." },
+  { step: "02", title: "UI/UX Design", copy: "Wireframes, prototypes, and visual systems ready to build." },
+  { step: "03", title: "App Development", copy: "Clean architecture, APIs, and feature delivery in sprints." },
+  { step: "04", title: "Testing & QA", copy: "Functional, device, and release checks before launch." },
+  { step: "05", title: "Launch", copy: "Store submission, rollout support, and go-live readiness." },
+  { step: "06", title: "Support & Improvements", copy: "Iterate with analytics, feedback, and roadmap updates." },
+];
+
+const work = [
   {
     name: "Galaxy Dental Care",
+    label: "Custom Dental Clinic Management System",
     detail: "Advances clinic operations with a unified management platform.",
     url: "https://galaxydentalcare.in/",
   },
   {
     name: "JusticeHome",
+    label: "Custom Web Application",
     detail: "Reimagines casework with secure documents, communication, and advocate diary.",
     url: "https://justicehome.in/",
   },
 ];
 
+const techGroups = [
+  {
+    title: "Mobile Development",
+    items: ["Flutter", "React Native", "Kotlin", "Swift"],
+  },
+  {
+    title: "Frontend & Backend",
+    items: ["Next.js", "Node.js", "React", "PostgreSQL"],
+  },
+  {
+    title: "Cloud & Infrastructure",
+    items: ["AWS", "Google Cloud", "Firebase", "Docker"],
+  },
+  {
+    title: "APIs & Integrations",
+    items: ["REST & GraphQL", "Payment Gateways", "Maps & SMS", "Third-party APIs"],
+  },
+];
+
+const industries = [
+  "Startups",
+  "Healthcare",
+  "E-commerce",
+  "Education",
+  "Real Estate",
+  "Finance",
+  "Logistics",
+  "Service Businesses",
+];
+
+const heroChecks = [
+  "Custom Android & iOS Applications",
+  "UI/UX Design",
+  "Scalable App Architecture",
+  "Business Efficiency Solutions",
+];
+
 export default function Home() {
   return (
     <>
-      {/* Full-bleed enterprise hero — cool light slate (not cream/white) */}
-      <section className="home-hero relative isolate min-h-[100svh] overflow-hidden text-ink">
-        <AmbientHeroBackground />
-
-        <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-7xl items-center gap-10 px-5 pb-16 pt-28 md:px-8 md:pt-32 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
-          <div className="max-w-xl">
-            <p className="animate-rise font-mono text-[11px] uppercase tracking-[0.2em] text-[#4a5d73]">
-              Enterprise software
+      {/* Hero */}
+      <section className="landing-hero">
+        <div className="landing-shell landing-hero-grid">
+          <div>
+            <p className="landing-kicker">CodeAI Cloud · Hyderabad</p>
+            <h1>Custom Mobile App Development Company in Hyderabad</h1>
+            <p className="landing-lead">
+              Transform your business ideas into powerful mobile applications with custom app
+              design and development solutions tailored to your business goals.
             </p>
-            <h1 className="animate-rise-1 mt-4 font-display text-[clamp(2.4rem,5.8vw,4.1rem)] font-semibold leading-[1.05] tracking-tight text-[#0f1a26]">
-              Idea to
-              <br />
-              application.
-            </h1>
-            <p className="animate-rise-2 mt-5 max-w-md text-base leading-relaxed text-[#3d4f63] md:text-lg">
-              We develop web, Android, and iPhone applications that help
-              organizations transform and scale with confidence.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/contact" className="btn-learn-more">
-                Start a project
+            <ul className="landing-checks">
+              {heroChecks.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <div className="landing-cta-row">
+              <Link href="#contact" className="btn-learn-more">
+                Get Free Consultation
               </Link>
-              <Link href="#solutions" className="btn-ghost">
-                Explore solutions
+              <Link href="#contact" className="btn-ghost">
+                Discuss Your App Idea
               </Link>
             </div>
           </div>
 
-          <HeroHighlightSwitcher />
+          <div className="landing-hero-panel" aria-hidden="true">
+            <div className="landing-phone landing-phone-one">
+              <div className="landing-phone-screen">
+                <span />
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="landing-phone landing-phone-two">
+              <div className="landing-phone-screen landing-phone-screen-alt">
+                <span />
+                <span />
+                <span />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Structured cards below the fold */}
-      <section id="solutions" className="scroll-mt-24 border-t border-ink/8 px-5 py-20 md:px-8 md:py-28">
-        <div className="mx-auto max-w-7xl">
-          <div className="max-w-2xl">
-            <p className="eyebrow">Solutions</p>
-            <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-fog md:text-[2.75rem] md:leading-tight">
-              Cutting-edge solutions to power up your business.
-            </h2>
-          </div>
-
-          <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {cards.map((card) => (
-              <li key={card.title}>
-                <Link href={card.href} className="enterprise-card group">
-                  <h3 className="font-display text-xl font-semibold tracking-tight text-fog">
-                    {card.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-mist">{card.copy}</p>
-                  <span className="mt-6 inline-flex text-sm font-medium text-[#2f6fed] transition-transform duration-300 ease-out group-hover:translate-x-1">
-                    Learn more →
-                  </span>
-                </Link>
+      {/* Value cards */}
+      <section className="landing-section">
+        <div className="landing-shell">
+          <ul className="landing-value-grid">
+            {valueCards.map((card) => (
+              <li key={card.title} className="landing-value-card">
+                <h2>{card.title}</h2>
+                <p>{card.copy}</p>
               </li>
             ))}
           </ul>
         </div>
       </section>
 
-      <AmbitionBanner />
-
-      <section id="enterprise-stack" className="enterprise-stack-band scroll-mt-24 px-5 py-20 md:px-8 md:py-28">
-        <div className="mx-auto max-w-7xl">
-          <p className="eyebrow text-white/65">Enterprise transformation</p>
-          <h2 className="mt-3 max-w-3xl font-display text-3xl font-bold tracking-tight text-white md:text-[2.75rem] md:leading-tight">
-            Full-stack digital delivery across five integrated layers.
-          </h2>
-          <div className="mt-12">
-            <EnterpriseLayers />
+      {/* Services */}
+      <section id="services" className="landing-section landing-section-muted scroll-mt-24">
+        <div className="landing-shell">
+          <div className="landing-section-head">
+            <p className="landing-kicker">Services</p>
+            <h2>Cutting-edge mobile app services to power up your business.</h2>
           </div>
+          <ul className="landing-service-grid">
+            {services.map((service) => (
+              <li key={service.title} className="landing-service-card">
+                <h3>{service.title}</h3>
+                <p>{service.copy}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      <section className="pillars-band px-5 py-20 md:px-8 md:py-28">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+      {/* Built with focus */}
+      <section className="landing-focus">
+        <div className="landing-shell">
+          <p className="landing-kicker landing-kicker-on-dark">Our approach</p>
+          <h2>Built with focus, speed, and craft — so every project creates real value.</h2>
+          <ul className="landing-focus-grid">
+            <li>
+              <strong>Scalable Application Architecture</strong>
+              <span>Clean foundations that support growth without rewrites.</span>
+            </li>
+            <li>
+              <strong>Modern Development Technologies</strong>
+              <span>Proven stacks for mobile, web, APIs, and cloud delivery.</span>
+            </li>
+            <li>
+              <strong>Dedicated Project Communication</strong>
+              <span>Clear updates, demos, and ownership from kickoff to launch.</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {/* Process */}
+      <section id="process" className="landing-section scroll-mt-24">
+        <div className="landing-shell">
+          <div className="landing-section-head">
+            <p className="landing-kicker">Process</p>
+            <h2>From idea to App Store launch in six structured steps.</h2>
+          </div>
+          <ol className="landing-process-grid">
+            {processSteps.map((item) => (
+              <li key={item.step}>
+                <span>{item.step}</span>
+                <h3>{item.title}</h3>
+                <p>{item.copy}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* Our Work */}
+      <section id="work" className="landing-section landing-section-muted scroll-mt-24">
+        <div className="landing-shell">
+          <div className="landing-section-head">
+            <p className="landing-kicker">Our Work</p>
+            <h2>Real software in production.</h2>
+          </div>
+          <ul className="landing-work-grid">
+            {work.map((item) => (
+              <li key={item.name} className="landing-work-card">
+                <p className="landing-kicker">{item.label}</p>
+                <h3>
+                  <a href={item.url} target="_blank" rel="noopener noreferrer">
+                    {item.name}
+                  </a>
+                </h3>
+                <p>{item.detail}</p>
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="landing-work-link"
+                >
+                  {item.url.replace(/^https?:\/\//, "").replace(/\/$/, "")} →
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Tech stack */}
+      <section className="landing-section">
+        <div className="landing-shell">
+          <div className="landing-section-head">
+            <p className="landing-kicker">Technology</p>
+            <h2>Modern stack for mobile, web, and cloud products.</h2>
+          </div>
+          <ul className="landing-tech-grid">
+            {techGroups.map((group) => (
+              <li key={group.title}>
+                <h3>{group.title}</h3>
+                <div className="landing-tech-tags">
+                  {group.items.map((item) => (
+                    <span key={item}>{item}</span>
+                  ))}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Industries */}
+      <section id="about" className="landing-section landing-section-muted scroll-mt-24">
+        <div className="landing-shell">
+          <div className="landing-section-head">
+            <p className="landing-kicker">Industries</p>
+            <h2>Built for teams across growing verticals.</h2>
+          </div>
+          <ul className="landing-industry-grid">
+            {industries.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Contact / Inquiry */}
+      <section id="contact" className="landing-contact scroll-mt-24">
+        <div className="landing-shell landing-contact-grid">
           <div>
-            <p className="eyebrow text-white/65">Five pillars of transformation</p>
-            <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-white md:text-[2.75rem] md:leading-tight">
-              The backbone of lasting digital change.
-            </h2>
-            <Link href="/contact" className="btn-learn-more mt-8 inline-flex">
-              Reach out to us
-            </Link>
+            <p className="landing-kicker landing-kicker-on-dark">Inquiry</p>
+            <h2>Have an App Idea? Let&apos;s Build It Together.</h2>
+            <p>
+              Share your requirements and we&apos;ll help you plan the right Android, iOS, or
+              cross-platform product for your business.
+            </p>
+            <div className="landing-contact-meta">
+              <a href="tel:+918328670576">8328670576</a>
+              <a href="mailto:kalyansrinivas.it@gmail.com">kalyansrinivas.it@gmail.com</a>
+              <p>Chat with our team · Hyderabad</p>
+            </div>
           </div>
-          <TransformationPillars />
+          <LandingInquiryForm />
         </div>
       </section>
 
-      <section className="border-y border-ink/8 px-5 py-20 md:px-8 md:py-28">
-        <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <h2 className="max-w-2xl font-display text-3xl font-bold tracking-tight text-fog md:text-[2.75rem]">
-              Customer stories
-            </h2>
-            <Link href="/clients" className="link-underline text-sm font-medium text-ink/70 hover:text-ink">
-              View all
-            </Link>
+      {/* FAQ */}
+      <section className="landing-section">
+        <div className="landing-shell landing-faq-layout">
+          <div className="landing-section-head">
+            <p className="landing-kicker">FAQ</p>
+            <h2>Answers before you start building.</h2>
           </div>
-          <ul className="mt-12 grid gap-6 md:grid-cols-2">
-            {stories.map((story) => (
-              <li key={story.name} className="tcs-story-card">
-                <p className="font-display text-2xl font-semibold tracking-tight text-fog">
-                  {story.url ? (
-                    <a href={story.url} target="_blank" rel="noopener noreferrer" className="link-underline">
-                      {story.name}
-                    </a>
-                  ) : (
-                    story.name
-                  )}
-                </p>
-                <p className="mt-4 text-base leading-relaxed text-mist">{story.detail}</p>
-                <Link href="/clients" className="link-underline mt-6 inline-block text-sm font-medium text-ink/70 hover:text-ink">
-                  Read more
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <LandingFaq />
         </div>
       </section>
 
-      <section className="cta-band px-5 py-24 md:px-8 md:py-32">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="eyebrow justify-center">Unlock digital growth</p>
-          <h2 className="mt-5 font-display text-3xl font-bold tracking-tight text-fog md:text-5xl md:leading-[1.1]">
-            Reimagine your enterprise with software at the core.
-          </h2>
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
-            <Link href="/contact" className="btn-learn-more">
-              Reach out to us
+      {/* Final CTA */}
+      <section className="landing-final-cta">
+        <div className="landing-shell">
+          <h2>Ready to Build Your Mobile Application?</h2>
+          <p>Get a free consultation and a clear path from idea to launch.</p>
+          <div className="landing-cta-row">
+            <Link href="#contact" className="btn-learn-more">
+              Get Free Consultation
             </Link>
-            <Link href="/services" className="btn-ghost">
-              Learn more
-            </Link>
+            <a href="tel:+918328670576" className="btn-ghost">
+              Call Now
+            </a>
           </div>
         </div>
       </section>

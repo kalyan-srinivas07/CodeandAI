@@ -24,11 +24,11 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "CodeandAI — Idea to Application",
-    template: "%s · CodeandAI",
+    default: "CodeAI Cloud — Custom Mobile App Development in Hyderabad",
+    template: "%s · CodeAI Cloud",
   },
   description:
-    "We develop web applications, Android apps, and iPhone apps that help organizations transform, compete, and grow with confidence.",
+    "Custom mobile app development company in Hyderabad — Android, iOS, cross-platform, UI/UX, and business applications built to ship.",
 };
 
 export default function RootLayout({
