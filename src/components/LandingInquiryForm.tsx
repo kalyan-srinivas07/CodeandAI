@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { SITE_EMAIL } from "@/lib/site";
 
 const appTypes = [
   "Android App",
@@ -11,7 +12,7 @@ const appTypes = [
   "Not sure yet",
 ] as const;
 
-const MAIL_TO = "kalyansrinivas.it@gmail.com";
+const MAIL_TO = SITE_EMAIL;
 
 export default function LandingInquiryForm() {
   const [sending, setSending] = useState(false);

@@ -1,20 +1,11 @@
 import Link from "next/link";
+import { primaryNav } from "@/data/nav";
 import {
   SITE_EMAIL,
   SITE_LOCALITY,
   SITE_PHONE,
   SITE_PHONE_DISPLAY,
 } from "@/lib/site";
-
-const nav = [
-  { href: "/#services", label: "Services" },
-  { href: "/#process", label: "Process" },
-  { href: "/#work", label: "Our Work" },
-  { href: "/#testimonials", label: "Testimonials" },
-  { href: "/#industries", label: "Industries" },
-  { href: "/#faq", label: "FAQ" },
-  { href: "/#contact", label: "Contact" },
-];
 
 export default function Footer() {
   return (
@@ -24,7 +15,7 @@ export default function Footer() {
           <Link href="/" className="font-display text-2xl font-extrabold tracking-tight text-white">
             CodeAI <span className="text-[#5eead4]">Cloud</span>
           </Link>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/80">
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-[#e8eef0]">
             Custom mobile app development company in Hyderabad — Android, iOS, cross-platform,
             UI/UX, and business applications built to ship.
           </p>
@@ -37,11 +28,11 @@ export default function Footer() {
         </div>
 
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/70">
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-[#d7e2e5]">
             Quick Links
           </p>
-          <ul className="mt-4 space-y-2.5 text-sm text-white/85">
-            {nav.map((item) => (
+          <ul className="mt-4 space-y-2.5 text-sm text-[#e8eef0]">
+            {primaryNav.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="hover:text-white">
                   {item.label}
@@ -52,27 +43,27 @@ export default function Footer() {
         </div>
 
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/70">
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-[#d7e2e5]">
             Contact
           </p>
           <ul className="mt-4 space-y-2.5 text-sm">
             <li>
-              <a href={`tel:${SITE_PHONE}`} className="text-white/85 hover:text-white">
+              <a href={`tel:${SITE_PHONE}`} className="text-[#e8eef0] hover:text-white">
                 {SITE_PHONE_DISPLAY}
               </a>
             </li>
             <li>
-              <a href={`mailto:${SITE_EMAIL}`} className="break-all text-white/85 hover:text-white">
+              <a href={`mailto:${SITE_EMAIL}`} className="break-all text-[#e8eef0] hover:text-white">
                 {SITE_EMAIL}
               </a>
             </li>
-            <li className="text-white/75">{SITE_LOCALITY}, India</li>
+            <li className="text-[#d7e2e5]">{SITE_LOCALITY}, India</li>
           </ul>
         </div>
       </div>
 
       <div className="border-t border-white/20">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-5 text-xs text-white/70 md:flex-row md:items-center md:justify-between md:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-5 text-xs text-[#d7e2e5] md:flex-row md:items-center md:justify-between md:px-8">
           <p>© {new Date().getFullYear()} CodeAI Cloud. All rights reserved.</p>
           <p className="font-mono tracking-wide">Android · iOS · Cross-Platform</p>
         </div>

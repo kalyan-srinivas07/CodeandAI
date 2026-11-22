@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import LandingInquiryForm from "@/components/LandingInquiryForm";
+import LandingInquiryFormLazy from "@/components/LandingInquiryFormLazy";
 import LandingFaq from "@/components/LandingFaq";
 import { landingFaqs } from "@/data/landing-faqs";
 import {
@@ -507,7 +507,7 @@ export default function Home() {
               <p>Chat with our team · Hyderabad</p>
             </div>
           </div>
-          <LandingInquiryForm />
+          <LandingInquiryFormLazy />
         </div>
       </section>
 

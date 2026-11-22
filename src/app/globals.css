@@ -2637,6 +2637,23 @@ textarea.field {
   text-align: left;
   font-weight: 600;
   color: #041c22;
+  cursor: pointer;
+  list-style: none;
+}
+
+.landing-faq-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.landing-faq-icon::before {
+  content: "+";
+  font-size: 1.15rem;
+  line-height: 1;
+  color: #0f766e;
+}
+
+.landing-faq-item[open] .landing-faq-icon::before {
+  content: "−";
 }
 
 .landing-faq-answer {
@@ -2644,10 +2661,6 @@ textarea.field {
   padding: 0 1.1rem 1rem;
   color: rgba(6, 42, 50, 0.7);
   line-height: 1.6;
-}
-
-.landing-faq-answer[hidden] {
-  display: none;
 }
 
 .landing-final-cta {
