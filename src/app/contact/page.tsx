@@ -33,41 +33,98 @@ export default function ContactPage() {
     const company = String(data.get("company") || "").trim() || "—";
     const message = String(data.get("message") || "").trim();
 
+    const subject = `Code & AI inquiry — ${platform}`;
+    const bodyLines = [
+      `Name: ${name}`,
+      `Email: ${email}`,
+      `Phone: ${phone}`,
+      `Company: ${company}`,
+      `Platform: ${platform}`,
+      "",
+      message,
+    ].join("\n");
+
     try {
-      const response = await fetch("/api/contact", {
+      // Must run in the browser — FormSubmit/Web3Forms reject Vercel server IPs on free plans.
+      const web3Key = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+
+      if (web3Key) {
+        const response = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            access_key: web3Key,
+            subject,
+            from_name: "Code & AI website",
+            name,
+            email,
+            phone,
+            company,
+            platform,
+            message,
+          }),
+        });
+
+        const result = (await response.json().catch(() => ({}))) as {
+          success?: boolean;
+          message?: string;
+        };
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || "Could not deliver the message.");
+        }
+
+        setSubmitted(true);
+        form.reset();
+        return;
+      }
+
+      const response = await fetch(`https://formsubmit.co/ajax/${MAIL_TO}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({ name, email, phone, company, platform, message }),
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          company,
+          platform,
+          message,
+          _subject: subject,
+          _template: "table",
+          _captcha: "false",
+        }),
       });
 
       const result = (await response.json().catch(() => ({}))) as {
-        ok?: boolean;
-        error?: string;
-        needsActivation?: boolean;
+        success?: string | boolean;
+        message?: string;
       };
 
-      if (result.needsActivation) {
-        const subject = `Code & AI inquiry — ${platform}`;
-        const body = [
-          `Name: ${name}`,
-          `Email: ${email}`,
-          `Phone: ${phone}`,
-          `Company: ${company}`,
-          `Platform: ${platform}`,
-          "",
-          message,
-        ].join("\n");
-        window.location.href = `mailto:${MAIL_TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      const needsActivation =
+        typeof result.message === "string" &&
+        result.message.toLowerCase().includes("activation");
+
+      if (needsActivation) {
+        window.location.href = `mailto:${MAIL_TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines)}`;
         throw new Error(
-          "First-time setup: check Gmail/Spam for FormSubmit “Activate Form”, click it once. A mail draft was also opened as backup."
+          "One-time setup: open Gmail (Inbox + Spam), find FormSubmit “Activate Form”, click it, then submit again. A backup email draft was opened."
         );
       }
 
-      if (!response.ok || !result.ok) {
-        throw new Error(result.error || "Could not send your message. Please try again.");
+      const ok = result.success === true || result.success === "true";
+      if (!response.ok || !ok) {
+        // Guaranteed backup so the inquiry is not lost
+        window.location.href = `mailto:${MAIL_TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines)}`;
+        throw new Error(
+          (result.message || "Delivery service blocked the request.") +
+            " A backup email draft was opened — press Send in your mail app."
+        );
       }
 
       setSubmitted(true);
