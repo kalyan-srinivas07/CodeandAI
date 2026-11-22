@@ -44,10 +44,10 @@ export default function ContactPage() {
                 </span>
                 <br />
                 <a
-                  href="tel:+918308670576"
+                  href="tel:+918328670576"
                   className="link-underline mt-2 inline-block text-lg text-white"
                 >
-                  8308670576
+                  8328670576
                 </a>
               </p>
               <p>
@@ -126,11 +126,25 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                <div>
-                  <label htmlFor="company" className="mb-2 block text-sm font-medium text-mist">
-                    Company <span className="text-mute">(optional)</span>
-                  </label>
-                  <input id="company" name="company" className="field" placeholder="Company name" />
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="phone" className="mb-2 block text-sm font-medium text-mist">
+                      Phone
+                    </label>
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      className="field"
+                      placeholder="8328670576"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="company" className="mb-2 block text-sm font-medium text-mist">
+                      Company <span className="text-mute">(optional)</span>
+                    </label>
+                    <input id="company" name="company" className="field" placeholder="Company name" />
+                  </div>
                 </div>
 
                 <div>

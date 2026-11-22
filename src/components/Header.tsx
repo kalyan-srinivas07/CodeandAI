@@ -15,8 +15,6 @@ const primary = [
 export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const isHome = pathname === "/";
 
   useEffect(() => {
     setOpen(false);
@@ -29,33 +27,15 @@ export default function Header() {
     };
   }, [open]);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   function isActive(href: string) {
     if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
   }
 
-  const transparent = isHome && !scrolled && !open;
-
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,backdrop-filter,box-shadow] duration-300 ease-out ${
-        transparent
-          ? "border-white/10 bg-transparent"
-          : "site-header border-ink/8 shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
-      }`}
-    >
+    <header className="site-header-dark fixed inset-x-0 top-0 z-50 border-b border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.25)]">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5 md:px-8">
-        <Link
-          href="/"
-          className={`brand-mark shrink-0 ${transparent ? "brand-mark-on-dark" : ""}`}
-        >
+        <Link href="/" className="brand-mark brand-mark-on-dark shrink-0">
           Code<span className="brand-mark-and">and</span>
           <span className="brand-mark-ai">AI</span>
         </Link>
@@ -65,9 +45,7 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className={`nav-link ${transparent ? "nav-link-dark" : ""} ${
-                isActive(link.href) ? (transparent ? "nav-link-dark-active" : "nav-link-active") : ""
-              }`}
+              className={`nav-link nav-link-dark ${isActive(link.href) ? "nav-link-dark-active" : ""}`}
             >
               {link.label}
             </Link>
@@ -75,14 +53,7 @@ export default function Header() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Link
-            href="/contact"
-            className={
-              transparent
-                ? "btn-learn-more !px-4 !py-2.5 text-[13px]"
-                : "btn-primary !px-4 !py-2.5 text-[13px]"
-            }
-          >
+          <Link href="/contact" className="btn-learn-more !px-4 !py-2.5 text-[13px]">
             Start a project
           </Link>
         </div>
@@ -92,11 +63,17 @@ export default function Header() {
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className={`flex h-10 w-10 items-center justify-center md:hidden ${
-            transparent ? "text-white" : "text-ink"
-          }`}
+          className="header-menu-icon flex h-10 w-10 items-center justify-center text-white md:hidden"
+          style={{ color: "#ffffff" }}
         >
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="#ffffff"
+            strokeWidth={1.75}
+            aria-hidden="true"
+          >
             {open ? (
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
             ) : (
@@ -107,12 +84,8 @@ export default function Header() {
       </div>
 
       <div
-        className={`overflow-hidden border-t transition-[max-height,opacity] duration-300 ease-out md:hidden ${
+        className={`overflow-hidden border-t border-white/10 bg-[#0b1c2c]/95 backdrop-blur-md transition-[max-height,opacity] duration-300 ease-out md:hidden ${
           open ? "max-h-[100dvh] opacity-100" : "max-h-0 opacity-0"
-        } ${
-          transparent
-            ? "border-white/10 bg-[#0b1c2c]/95 backdrop-blur-md"
-            : "site-header-panel border-ink/10"
         }`}
       >
         <nav className="flex min-h-[70dvh] flex-col gap-1 px-5 py-6" aria-label="Mobile">
@@ -120,14 +93,8 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className={`rounded-none py-3 text-lg font-medium tracking-tight transition-opacity duration-200 ${
-                transparent
-                  ? isActive(link.href)
-                    ? "text-white"
-                    : "text-white/60"
-                  : isActive(link.href)
-                    ? "text-ink"
-                    : "text-ink/55"
+              className={`rounded-none py-3 text-lg font-medium tracking-tight text-white transition-opacity duration-200 ${
+                isActive(link.href) ? "opacity-100" : "opacity-70"
               }`}
               onClick={() => setOpen(false)}
             >
@@ -136,7 +103,7 @@ export default function Header() {
           ))}
           <Link
             href="/contact"
-            className={`mt-6 w-full ${transparent ? "btn-learn-more" : "btn-primary"}`}
+            className="btn-learn-more mt-6 w-full"
             onClick={() => setOpen(false)}
           >
             Start a project

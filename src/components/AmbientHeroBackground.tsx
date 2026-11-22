@@ -17,9 +17,13 @@ export default function AmbientHeroBackground({
 
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      {/* Cool slate base — not cream / not pure white */}
+      <div className="absolute inset-0 bg-[#d7e0ea]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#c8d5e4] via-[#d9e3ee] to-[#b9c9db]" />
+
       {!videoFailed && videoSrc ? (
         <video
-          className="absolute inset-0 h-full w-full object-cover opacity-50 will-change-transform"
+          className="absolute inset-0 h-full w-full object-cover opacity-[0.18] will-change-transform"
           autoPlay
           muted
           loop
@@ -36,21 +40,18 @@ export default function AmbientHeroBackground({
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center opacity-50 will-change-transform"
+          className="object-cover object-center opacity-[0.16] will-change-transform"
         />
       )}
 
-      {/* Animated ambient orbs — GPU-friendly transform/opacity */}
-      <div className="ambient-orb ambient-orb-a" />
-      <div className="ambient-orb ambient-orb-b" />
-      <div className="ambient-orb ambient-orb-c" />
+      <div className="ambient-orb ambient-orb-a ambient-orb-slate" />
+      <div className="ambient-orb ambient-orb-b ambient-orb-slate" />
+      <div className="ambient-orb ambient-orb-c ambient-orb-slate" />
 
-      {/* Perspective grid motion */}
-      <div className="ambient-grid" />
+      <div className="ambient-grid ambient-grid-slate" />
 
-      {/* Dark scrim for contrast */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#050b12]/95 via-[#0b1c2c]/78 to-[#0b1c2c]/55" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#050b12]/90 via-transparent to-[#050b12]/45" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#c5d2e2]/90 via-[#d4dee9]/55 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#b7c6d8]/75 via-transparent to-[#d5e0ec]/45" />
     </div>
   );
 }

@@ -51,10 +51,10 @@ export default function Footer() {
           <ul className="mt-4 space-y-2.5 text-sm">
             <li>
               <a
-                href="tel:+918308670576"
+                href="tel:+918328670576"
                 className="link-underline text-[#d49293]/75 hover:text-[#d49293]"
               >
-                8308670576
+                8328670576
               </a>
             </li>
             <li>

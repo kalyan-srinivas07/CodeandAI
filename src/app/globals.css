@@ -104,6 +104,19 @@ body::after {
   -webkit-backdrop-filter: blur(14px) saturate(1.05);
 }
 
+.site-header-dark {
+  background: rgba(11, 28, 44, 0.92);
+  backdrop-filter: blur(14px) saturate(1.05);
+  -webkit-backdrop-filter: blur(14px) saturate(1.05);
+}
+
+.site-header-dark.is-clear {
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
 .brand-mark {
   display: inline-flex;
   align-items: baseline;
@@ -173,16 +186,23 @@ body::after {
 }
 
 .nav-link-dark {
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff !important;
 }
 
 .nav-link-dark:hover {
-  color: #fff;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .nav-link-dark-active {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.header-menu-icon,
+.header-menu-icon svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
 }
 
 /* Ambient hero motion */
@@ -220,6 +240,22 @@ body::after {
   animation-delay: -7s;
 }
 
+.ambient-orb-slate.ambient-orb-a {
+  background: rgba(47, 111, 237, 0.22);
+}
+
+.ambient-orb-slate.ambient-orb-b {
+  background: rgba(90, 130, 170, 0.28);
+}
+
+.ambient-orb-slate.ambient-orb-c {
+  background: rgba(47, 111, 237, 0.12);
+}
+
+.home-hero {
+  background: #cfd9e6;
+}
+
 .ambient-grid {
   position: absolute;
   inset: 20% -15% -40%;
@@ -233,6 +269,13 @@ body::after {
   opacity: 0.45;
   will-change: transform, opacity;
   animation: ambient-grid-drift 18s linear infinite;
+}
+
+.ambient-grid-slate {
+  background-image:
+    linear-gradient(rgba(40, 70, 110, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(40, 70, 110, 0.1) 1px, transparent 1px);
+  opacity: 0.4;
 }
 
 @keyframes ambient-float {
@@ -257,11 +300,12 @@ body::after {
 }
 
 .hero-switcher {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(8, 20, 32, 0.55);
+  border: 1px solid rgba(40, 70, 110, 0.16);
+  background: rgba(232, 239, 247, 0.82);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   padding: 1rem;
+  box-shadow: 0 14px 40px rgba(20, 40, 70, 0.1);
 }
 
 .hero-switcher-tabs {
@@ -272,9 +316,9 @@ body::after {
 
 .hero-switcher-tab {
   padding: 0.55rem 0.85rem;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(20, 20, 20, 0.12);
   background: transparent;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(20, 20, 20, 0.55);
   font-size: 0.8125rem;
   font-weight: 500;
   transition: transform 0.25s ease, opacity 0.25s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
@@ -282,8 +326,8 @@ body::after {
 }
 
 .hero-switcher-tab:hover {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.35);
+  color: var(--ink);
+  border-color: rgba(20, 20, 20, 0.28);
 }
 
 .hero-switcher-tab.is-active {
@@ -317,7 +361,7 @@ body::after {
   font-size: 0.65rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #f5c542;
+  color: #b85f62;
 }
 
 .hero-switcher-title {
@@ -325,14 +369,14 @@ body::after {
   font-family: var(--font-syne), sans-serif;
   font-size: 1.35rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--ink);
 }
 
 .hero-switcher-copy {
   margin-top: 0.55rem;
   font-size: 0.92rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--mist);
 }
 
 .enterprise-card {

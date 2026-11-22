@@ -43,21 +43,21 @@ const stories = [
 export default function Home() {
   return (
     <>
-      {/* Full-bleed enterprise hero */}
-      <section className="relative isolate min-h-[100svh] overflow-hidden bg-[#050b12] text-white">
+      {/* Full-bleed enterprise hero — cool light slate (not cream/white) */}
+      <section className="home-hero relative isolate min-h-[100svh] overflow-hidden text-ink">
         <AmbientHeroBackground />
 
         <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-7xl items-center gap-10 px-5 pb-16 pt-28 md:px-8 md:pt-32 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
           <div className="max-w-xl">
-            <p className="animate-rise font-mono text-[11px] uppercase tracking-[0.2em] text-white/65">
+            <p className="animate-rise font-mono text-[11px] uppercase tracking-[0.2em] text-[#4a5d73]">
               Enterprise software
             </p>
-            <h1 className="animate-rise-1 mt-4 font-display text-[clamp(2.4rem,5.8vw,4.1rem)] font-semibold leading-[1.05] tracking-tight text-white">
+            <h1 className="animate-rise-1 mt-4 font-display text-[clamp(2.4rem,5.8vw,4.1rem)] font-semibold leading-[1.05] tracking-tight text-[#0f1a26]">
               Idea to
               <br />
               application.
             </h1>
-            <p className="animate-rise-2 mt-5 max-w-md text-base leading-relaxed text-white/75 md:text-lg">
+            <p className="animate-rise-2 mt-5 max-w-md text-base leading-relaxed text-[#3d4f63] md:text-lg">
               We develop web, Android, and iPhone applications that help
               organizations transform and scale with confidence.
             </p>
@@ -65,7 +65,7 @@ export default function Home() {
               <Link href="/contact" className="btn-learn-more">
                 Start a project
               </Link>
-              <Link href="#solutions" className="btn-banner-ghost">
+              <Link href="#solutions" className="btn-ghost">
                 Explore solutions
               </Link>
             </div>
