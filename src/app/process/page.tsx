@@ -7,6 +7,9 @@ const page = sitePages.find((p) => p.href === "/process")!;
 export const metadata: Metadata = {
   title: page.label,
   description: page.lead,
+  alternates: {
+    canonical: "/process",
+  },
 };
 
 export default function Page() {

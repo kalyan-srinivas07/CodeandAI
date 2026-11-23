@@ -40,6 +40,8 @@ export const metadata: Metadata = {
   applicationName: SITE_NAME,
   keywords: [
     "mobile app development Hyderabad",
+    "affordable mobile application",
+    "affordable application development",
     "Android app development",
     "iOS app development",
     "Flutter",

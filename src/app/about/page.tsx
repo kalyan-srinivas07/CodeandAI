@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "CodeandAI is a software company building digital solutions for startups, businesses, and enterprise teams.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 const values = [

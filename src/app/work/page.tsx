@@ -7,6 +7,9 @@ const page = sitePages.find((p) => p.href === "/work")!;
 export const metadata: Metadata = {
   title: page.label,
   description: page.lead,
+  alternates: {
+    canonical: "/work",
+  },
 };
 
 export default function Page() {
